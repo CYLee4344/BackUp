@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="OrderMapper">
+	<resultMap type="study.spring.selection.model.Order" id="orderMap">
+		<result property="order_no" column="order_no" />
+		<result property="reg_date" column="reg_date" />
+		<result property="edit_date" column="edit_date" />
+		<result property="cart_no" column="cart_no" />
+		<result property="product_no" column="product_no" />
+	</resultMap>
+	
+	<!-- 단일행 조회 -->
+	<select id="selectItem" parameterType="study.spring.selection.model.Order" resultMap="orderMap">
+		SELECT order_no, reg_date, edit_date, cart_no, product_no 
+		FROM selection.order WHERE order_no=#{order_no};
+	</select>
+	
+	<!-- 다중행 조회 -->
+	<select id="selectList" parameterType="study.spring.selection.model.Order" resultMap="orderMap">
+		SELECT order_no, reg_date, edit_date, cart_no, product_no 
+		FROM selection.order
+		
+		<where>
+			<if test="reg_date != null and reg_date != ''">
+				reg_date LIKE concat('%', #{reg_date}, '%')
+			</if>
+			
+			<if test="edit_date != null and edit_date != ''">
+				OR edit_date LIKE concat('%', #{edit_date}, '%')
+			</if>
+			
+			<if test="cart_no != null and cart_no != ''">
+				OR cart_no LIKE concat('%', #{cart_no}, '%')
+			</if>
+			
+			<if test="product_no != null and product_no != ''">
+				OR product_no LIKE concat('%', #{product_no}, '%')
+			</if>
+		</where>
+		
+		ORDER BY order_no DESC
+	</select>
+	
+	<!-- 데이터 저장 -->
+	<insert id="insertItem" parameterType="study.spring.selection.model.Order" useGeneratedKeys="true" keyProperty="order_no">
+		INSERT INTO selection.order (reg_date, edit_date, cart_no, product_no) 
+		VALUES (#{reg_date}, #{edit_date}, #{cart_no}, #{product_no});
+	</insert>
+	
+	<!-- 데이터 삭제-->
+	<delete id="deleteItem" parameterType="study.spring.selection.model.Order">
+		DELETE FROM selection.order WHERE order_no=#{order_no};
+	</delete>
+	
+	<!-- 데이터 수정 -->
+	<update id="updateItem" parameterType="study.spring.selection.model.Order">
+		UPDATE selection.order SET edit_date=#{edit_date} WHERE order_no=#{order_no};
+	</update>
+	
+	<!-- 조건에 맞는 데이터 수를 집계하여 int 타입으로 반환 -->
+	<select id="selectCountAll" parameterType="study.spring.selection.model.Order" resultType="int">
+		SELECT COUNT(*) FROM selection.order
+		
+		<where>
+			<if test="reg_date != null and reg_date != ''">
+				reg_date LIKE concat('%', #{reg_date}, '%')
+			</if>
+			
+			<if test="edit_date != null and edit_date != ''">
+				OR edit_date LIKE concat('%', #{edit_date}, '%')
+			</if>
+			
+			<if test="cart_no != null and cart_no != ''">
+				OR cart_no LIKE concat('%', #{cart_no}, '%')
+			</if>
+			
+			<if test="product_no != null and product_no != ''">
+				OR product_no LIKE concat('%', #{product_no}, '%')
+			</if>
+		</where>
+	</select>
+</mapper>

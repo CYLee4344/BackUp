@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="DeliveryMapper">
+	<resultMap type="study.spring.selection.model.Delivery" id="deliveryMap">
+		<result property="delivery_no" column="delivery_no" />
+		<result property="user_name" column="user_name" />
+		<result property="delivery_type" column="delivery_type" />
+		<result property="delivery_qty" column="delivery_qty" />
+		<result property="delivery_status" column="delivery_status" />
+		<result property="order_cancel" column="order_cancel" />
+		<result property="receive_name" column="receive_name" />
+		<result property="receive_tel" column="receive_tel" />
+		<result property="receive_addr" column="receive_addr" />
+		<result property="receive_addr2" column="receive_addr2" />
+		<result property="receive_addr3" column="receive_addr3" />
+		<result property="receive_addr4" column="receive_addr4" />
+		<result property="receive_addr5" column="receive_addr5" />
+		<result property="reg_date" column="reg_date" />
+		<result property="edit_date" column="edit_date" />
+		<result property="pay_no" column="pay_no" />
+	</resultMap>
+	
+	<!-- 단일행 조회 -->
+	<select id="selectItem" parameterType="study.spring.selection.model.Delivery" resultMap="deliveryMap">
+		SELECT delivery_no, user_name, delivery_type, delivery_qty, delivery_status, order_cancel, receive_name, receive_tel, receive_addr, receive_addr2, receive_addr3, receive_addr4, receive_addr5, reg_date, edit_date, pay_no 
+		FROM delivery WHERE delivery_no=#{delivery_no};
+	</select>
+	
+	<!-- 다중행 조회 -->
+	<select id="selectList" parameterType="study.spring.selection.model.Delivery" resultMap="deliveryMap">
+		SELECT delivery_no, user_name, delivery_type, delivery_qty, delivery_status, order_cancel, receive_name, receive_tel, receive_addr, receive_addr2, receive_addr3, receive_addr4, receive_addr5, reg_date, edit_date, pay_no 
+		FROM delivery
+		
+		<where>
+			<if test="user_name != null and user_name != ''">
+				user_name LIKE concat('%', #{user_name}, '%')
+			</if>
+			
+			<if test="delivery_type != null and delivery_type != ''">
+				OR delivery_type LIKE concat('%', #{delivery_type}, '%')
+			</if>
+			
+			<if test="delivery_qty != null and delivery_qty != ''">
+				OR delivery_qty LIKE concat('%', #{delivery_qty}, '%')
+			</if>
+			
+			<if test="delivery_status != null and delivery_status != ''">
+				OR delivery_status LIKE concat('%', #{delivery_status}, '%')
+			</if>
+			
+			<if test="order_cancel != null and order_cancel != ''">
+				OR order_cancel LIKE concat('%', #{order_cancel}, '%')
+			</if>
+			
+			<if test="receive_name != null and receive_name != ''">
+				OR receive_name LIKE concat('%', #{receive_name}, '%')
+			</if>
+			
+			<if test="receive_tel != null and receive_tel != ''">
+				OR receive_tel LIKE concat('%', #{receive_tel}, '%')
+			</if>
+			
+			<if test="receive_addr != null and receive_addr != ''">
+				OR receive_addr LIKE concat('%', #{receive_addr}, '%')
+			</if>
+			
+			<if test="receive_addr2 != null and receive_addr2 != ''">
+				OR receive_addr2 LIKE concat('%', #{receive_addr2}, '%')
+			</if>
+			
+			<if test="receive_addr3 != null and receive_addr3 != ''">
+				OR receive_addr3 LIKE concat('%', #{receive_addr3}, '%')
+			</if>
+			
+			<if test="receive_addr4 != null and receive_addr4 != ''">
+				OR receive_addr4 LIKE concat('%', #{receive_addr4}, '%')
+			</if>
+			
+			<if test="receive_addr5 != null and receive_addr5 != ''">
+				OR receive_addr5 LIKE concat('%', #{receive_addr5}, '%')
+			</if>
+			
+			<if test="reg_date != null and reg_date != ''">
+				OR reg_date LIKE concat('%', #{reg_date}, '%')
+			</if>
+			
+			<if test="edit_date != null and edit_date != ''">
+				OR edit_date LIKE concat('%', #{edit_date}, '%')
+			</if>
+			
+			<if test="pay_no != null and pay_no != ''">
+				OR pay_no LIKE concat('%', #{pay_no}, '%')
+			</if>
+		</where>
+		
+		ORDER BY delivery_no DESC
+	</select>
+	
+	<!-- 데이터 저장 -->
+	<insert id="insertItem" parameterType="study.spring.selection.model.Delivery" useGeneratedKeys="true" keyProperty="delivery_no">
+		INSERT INTO delivery (user_name, delivery_type, delivery_qty, delivery_status, order_cancel, receive_name, receive_tel, receive_addr, receive_addr2, receive_addr3, receive_addr4, receive_addr5, reg_date, edit_date, pay_no) 
+		VALUES (#{user_name}, #{delivery_type}, #{delivery_qty}, #{delivery_status}, #{order_cancel}, #{receive_name}, #{receive_tel}, #{receive_addr}, #{receive_addr2}, #{receive_addr3}, #{receive_addr4}, #{receive_addr5}, #{reg_date}, #{edit_date}, #{pay_no});
+	</insert>
+	
+	<!-- 데이터 삭제-->
+	<delete id="deleteItem" parameterType="study.spring.selection.model.Delivery">
+		DELETE FROM delivery WHERE delivery_no=#{delivery_no};
+	</delete>
+	
+	<!-- 데이터 수정 -->
+	<update id="updateItem" parameterType="study.spring.selection.model.Delivery">
+		UPDATE delivery SET receive_name=#{receive_name} WHERE delivery_no=#{delivery_no};
+	</update>
+	
+	<!-- 조건에 맞는 데이터 수를 집계하여 int 타입으로 반환 -->
+	<select id="selectCountAll" parameterType="study.spring.selection.model.Delivery" resultType="int">
+		SELECT COUNT(*) FROM delivery
+		
+		<where>
+			<if test="user_name != null and user_name != ''">
+				user_name LIKE concat('%', #{user_name}, '%')
+			</if>
+			
+			<if test="delivery_type != null and delivery_type != ''">
+				OR delivery_type LIKE concat('%', #{delivery_type}, '%')
+			</if>
+			
+			<if test="delivery_qty != null and delivery_qty != ''">
+				OR delivery_qty LIKE concat('%', #{delivery_qty}, '%')
+			</if>
+			
+			<if test="delivery_status != null and delivery_status != ''">
+				OR delivery_status LIKE concat('%', #{delivery_status}, '%')
+			</if>
+			
+			<if test="order_cancel != null and order_cancel != ''">
+				OR order_cancel LIKE concat('%', #{order_cancel}, '%')
+			</if>
+			
+			<if test="receive_name != null and receive_name != ''">
+				OR receive_name LIKE concat('%', #{receive_name}, '%')
+			</if>
+			
+			<if test="receive_tel != null and receive_tel != ''">
+				OR receive_tel LIKE concat('%', #{receive_tel}, '%')
+			</if>
+			
+			<if test="receive_addr != null and receive_addr != ''">
+				OR receive_addr LIKE concat('%', #{receive_addr}, '%')
+			</if>
+			
+			<if test="receive_addr2 != null and receive_addr2 != ''">
+				OR receive_addr2 LIKE concat('%', #{receive_addr2}, '%')
+			</if>
+			
+			<if test="receive_addr3 != null and receive_addr3 != ''">
+				OR receive_addr3 LIKE concat('%', #{receive_addr3}, '%')
+			</if>
+			
+			<if test="receive_addr4 != null and receive_addr4 != ''">
+				OR receive_addr4 LIKE concat('%', #{receive_addr4}, '%')
+			</if>
+			
+			<if test="receive_addr5 != null and receive_addr5 != ''">
+				OR receive_addr5 LIKE concat('%', #{receive_addr5}, '%')
+			</if>
+			
+			<if test="reg_date != null and reg_date != ''">
+				OR reg_date LIKE concat('%', #{reg_date}, '%')
+			</if>
+			
+			<if test="edit_date != null and edit_date != ''">
+				OR edit_date LIKE concat('%', #{edit_date}, '%')
+			</if>
+			
+			<if test="pay_no != null and pay_no != ''">
+				OR pay_no LIKE concat('%', #{pay_no}, '%')
+			</if>
+		</where>
+	</select>
+</mapper>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="PayMapper">
+	<resultMap type="study.spring.selection.model.Pay" id="payMap">
+		<result property="pay_no" column="pay_no" />
+		<result property="pay_type" column="pay_type" />
+		<result property="reg_date" column="reg_date" />
+		<result property="edit_date" column="edit_date" />
+		<result property="coupon_no" column="coupon_no" />
+		<result property="order_no" column="order_no" />
+	</resultMap>
+	
+	<!-- 단일행 조회 -->
+	<select id="selectItem" parameterType="study.spring.selection.model.Pay" resultMap="payMap">
+		SELECT pay_no, pay_type, reg_date, edit_date, coupon_no, order_no 
+		FROM pay WHERE pay_no=#{pay_no};
+	</select>
+	
+	<!-- 다중행 조회 -->
+	<select id="selectList" parameterType="study.spring.selection.model.Pay" resultMap="payMap">
+		SELECT pay_no, pay_type, reg_date, edit_date, coupon_no, order_no 
+		FROM pay
+		
+		<where>
+			<if test="pay_type != null and pay_type != ''">
+				pay_type LIKE concat('%', #{pay_type}, '%')
+			</if>
+			
+			<if test="reg_date != null and reg_date != ''">
+				OR reg_date LIKE concat('%', #{reg_date}, '%')
+			</if>
+			
+			<if test="edit_date != null and edit_date != ''">
+				OR edit_date LIKE concat('%', #{edit_date}, '%')
+			</if>
+			
+			<if test="coupon_no != null and coupon_no != ''">
+				OR coupon_no LIKE concat('%', #{coupon_no}, '%')
+			</if>
+			
+			<if test="order_no != null and order_no != ''">
+				OR order_no LIKE concat('%', #{order_no}, '%')
+			</if>
+		</where>
+		
+		ORDER BY pay_no DESC
+	</select>
+	
+	<!-- 데이터 저장 -->
+	<insert id="insertItem" parameterType="study.spring.selection.model.Pay" useGeneratedKeys="true" keyProperty="pay_no">
+		INSERT INTO pay (pay_type, reg_date, edit_date, coupon_no, order_no) 
+		VALUES (#{pay_type}, #{reg_date}, #{edit_date}, #{coupon_no}, #{order_no});
+	</insert>
+	
+	<!-- 데이터 삭제-->
+	<delete id="deleteItem" parameterType="study.spring.selection.model.Pay">
+		DELETE FROM pay WHERE pay_no=#{pay_no};
+	</delete>
+	
+	<!-- 데이터 수정 -->
+	<update id="updateItem" parameterType="study.spring.selection.model.Pay">
+		UPDATE pay SET pay_type=#{pay_type} WHERE pay_no=#{pay_no};
+	</update>
+	
+	<!-- 조건에 맞는 데이터 수를 집계하여 int 타입으로 반환 -->
+	<select id="selectCountAll" parameterType="study.spring.selection.model.Pay" resultType="int">
+		SELECT COUNT(*) FROM pay
+		
+		<where>
+			<if test="pay_type != null and pay_type != ''">
+				pay_type LIKE concat('%', #{pay_type}, '%')
+			</if>
+			
+			<if test="reg_date != null and reg_date != ''">
+				OR reg_date LIKE concat('%', #{reg_date}, '%')
+			</if>
+			
+			<if test="edit_date != null and edit_date != ''">
+				OR edit_date LIKE concat('%', #{edit_date}, '%')
+			</if>
+			
+			<if test="coupon_no != null and coupon_no != ''">
+				OR coupon_no LIKE concat('%', #{coupon_no}, '%')
+			</if>
+			
+			<if test="order_no != null and order_no != ''">
+				OR order_no LIKE concat('%', #{order_no}, '%')
+			</if>
+		</where>
+	</select>
+</mapper>

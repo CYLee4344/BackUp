@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="CartMapper">
+	<resultMap type="study.spring.selection.model.Cart" id="cartMap">
+		<result property="cart_no" column="cart_no" />
+		<result property="product_qty" column="product_qty" />
+		<result property="product_size" column="product_size" />
+		<result property="product_price" column="product_price" />
+		<result property="product_color" column="product_color" />
+		<result property="product_brand" column="product_brand" />
+		<result property="product_name" column="product_name" />
+		<result property="reg_date" column="reg_date" />
+		<result property="edit_date" column="edit_date" />
+		<result property="myheart_no" column="myheart_no" />
+		<result property="product_no" column="product_no" />
+	</resultMap>
+	
+	<!-- 단일행 조회 -->
+	<select id="selectItem" parameterType="study.spring.selection.model.Cart" resultMap="cartMap">
+		SELECT cart_no, product_qty, product_size, product_price, product_color, product_brand, product_name, reg_date, edit_date, myheart_no, product_no 
+		FROM cart WHERE cart_no=#{cart_no};
+	</select>
+	
+	<!-- 다중행 조회 -->
+	<select id="selectList" parameterType="study.spring.selection.model.Cart" resultMap="cartMap">
+		SELECT cart_no, product_qty, product_size, product_price, product_color, product_brand, product_name, reg_date, edit_date, myheart_no, product_no 
+		FROM cart
+		
+		<where>
+			<if test="product_qty != null and product_qty != ''">
+				product_qty LIKE concat('%', #{product_qty}, '%')
+			</if>
+			
+			<if test="product_size != null and product_size != ''">
+				OR product_size LIKE concat('%', #{product_size}, '%')
+			</if>
+			
+			<if test="product_price != null and product_price != ''">
+				OR product_price LIKE concat('%', #{product_price}, '%')
+			</if>
+			
+			<if test="product_color != null and product_color != ''">
+				OR product_color LIKE concat('%', #{product_color}, '%')
+			</if>
+			
+			<if test="product_brand != null and product_brand != ''">
+				OR product_brand LIKE concat('%', #{product_brand}, '%')
+			</if>
+			
+			<if test="product_name != null and product_name != ''">
+				OR product_name LIKE concat('%', #{product_name}, '%')
+			</if>
+			
+			<if test="reg_date != null and reg_date != ''">
+				OR reg_date LIKE concat('%', #{reg_date}, '%')
+			</if>
+			
+			<if test="edit_date != null and edit_date != ''">
+				OR edit_date LIKE concat('%', #{edit_date}, '%')
+			</if>
+			
+			<if test="myheart_no != null and myheart_no != ''">
+				OR myheart_no LIKE concat('%', #{myheart_no}, '%')
+			</if>
+			
+			<if test="product_no != null and product_no != ''">
+				OR product_no LIKE concat('%', #{product_no}, '%')
+			</if>
+		</where>
+		
+		ORDER BY cart_no DESC
+	</select>
+	
+	<!-- 데이터 저장 -->
+	<insert id="insertItem" parameterType="study.spring.selection.model.Cart" useGeneratedKeys="true" keyProperty="cart_no">
+		INSERT INTO cart (product_qty, product_size, product_price, product_color, product_brand, product_name, reg_date, edit_date, myheart_no, product_no) 
+		VALUES (#{product_qty}, #{product_size}, #{product_price}, #{product_color}, #{product_brand}, #{product_name}, #{reg_date}, #{edit_date}, #{myheart_no}, #{product_no});
+	</insert>
+	
+	<!-- 데이터 삭제-->
+	<delete id="deleteItem" parameterType="study.spring.selection.model.Cart">
+		DELETE FROM cart WHERE cart_no=#{cart_no};
+	</delete>
+	
+	<!-- 데이터 수정 -->
+	<update id="updateItem" parameterType="study.spring.selection.model.Cart">
+		UPDATE cart SET product_color=#{product_color} WHERE cart_no=#{cart_no};
+	</update>
+	
+	<!-- 조건에 맞는 데이터 수를 집계하여 int 타입으로 반환 -->
+	<select id="selectCountAll" parameterType="study.spring.selection.model.Cart" resultType="int">
+		SELECT COUNT(*) FROM cart
+		
+		<where>
+			<if test="product_qty != null and product_qty != ''">
+				product_qty LIKE concat('%', #{product_qty}, '%')
+			</if>
+			
+			<if test="product_size != null and product_size != ''">
+				OR product_size LIKE concat('%', #{product_size}, '%')
+			</if>
+			
+			<if test="product_price != null and product_price != ''">
+				OR product_price LIKE concat('%', #{product_price}, '%')
+			</if>
+			
+			<if test="product_color != null and product_color != ''">
+				OR product_color LIKE concat('%', #{product_color}, '%')
+			</if>
+			
+			<if test="product_brand != null and product_brand != ''">
+				OR product_brand LIKE concat('%', #{product_brand}, '%')
+			</if>
+			
+			<if test="product_name != null and product_name != ''">
+				OR product_name LIKE concat('%', #{product_name}, '%')
+			</if>
+			
+			<if test="reg_date != null and reg_date != ''">
+				OR reg_date LIKE concat('%', #{reg_date}, '%')
+			</if>
+			
+			<if test="edit_date != null and edit_date != ''">
+				OR edit_date LIKE concat('%', #{edit_date}, '%')
+			</if>
+			
+			<if test="myheart_no != null and myheart_no != ''">
+				OR myheart_no LIKE concat('%', #{myheart_no}, '%')
+			</if>
+			
+			<if test="product_no != null and product_no != ''">
+				OR product_no LIKE concat('%', #{product_no}, '%')
+			</if>
+		</where>
+	</select>
+</mapper>

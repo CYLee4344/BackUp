@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="CouponMapper">
+	<resultMap type="study.spring.selection.model.Coupon" id="couponMap">
+		<result property="coupon_no" column="coupon_no" />
+		<result property="coupon_code" column="coupon_code" />
+		<result property="coupon_name" column="coupon_name" />
+		<result property="coupon_price" column="coupon_price" />
+		<result property="coupon_used" column="coupon_used" />
+		<result property="coupon_exp" column="coupon_exp" />
+		<result property="reg_date" column="reg_date" />
+		<result property="edit_date" column="edit_date" />
+		<result property="user_no" column="user_no" />
+	</resultMap>
+	
+	<!-- 단일행 조회 -->
+	<select id="selectItem" parameterType="study.spring.selection.model.Coupon" resultMap="couponMap">
+		SELECT coupon_no, coupon_code, coupon_name, coupon_price, coupon_used, coupon_exp, reg_date, edit_date, user_no 
+		FROM coupon WHERE coupon_no=#{coupon_no};
+	</select>
+	
+	<!-- 다중행 조회 -->
+	<select id="selectList" parameterType="study.spring.selection.model.Coupon" resultMap="couponMap">
+		SELECT coupon_no, coupon_code, coupon_name, coupon_price, coupon_used, coupon_exp, reg_date, edit_date, user_no 
+		FROM coupon
+		
+		<where>
+			<if test="coupon_code != null and coupon_code != ''">
+				coupon_code LIKE concat('%', #{coupon_code}, '%')
+			</if>
+			
+			<if test="coupon_name != null and coupon_name != ''">
+				OR coupon_name LIKE concat('%', #{coupon_name}, '%')
+			</if>
+			
+			<if test="coupon_price != null and coupon_price != ''">
+				OR coupon_price LIKE concat('%', #{coupon_price}, '%')
+			</if>
+			
+			<if test="coupon_used != null and coupon_used != ''">
+				OR coupon_used LIKE concat('%', #{coupon_used}, '%')
+			</if>
+			
+			<if test="coupon_exp != null and coupon_exp != ''">
+				OR coupon_exp LIKE concat('%', #{coupon_exp}, '%')
+			</if>
+			
+			<if test="reg_date != null and reg_date != ''">
+				OR reg_date LIKE concat('%', #{reg_date}, '%')
+			</if>
+			
+			<if test="edit_date != null and edit_date != ''">
+				OR edit_date LIKE concat('%', #{edit_date}, '%')
+			</if>
+			
+			<if test="user_no != null and user_no != ''">
+				OR user_no LIKE concat('%', #{user_no}, '%')
+			</if>
+		</where>
+		
+		ORDER BY coupon_no DESC
+	</select>
+	
+	<!-- 데이터 저장 -->
+	<insert id="insertItem" parameterType="study.spring.selection.model.Coupon" useGeneratedKeys="true" keyProperty="coupon_no">
+		INSERT INTO coupon (coupon_code, coupon_name, coupon_price, coupon_used, coupon_exp, reg_date, edit_date, user_no) 
+		VALUES (#{coupon_code}, #{coupon_name}, #{coupon_price}, #{coupon_used}, #{coupon_exp}, #{reg_date}, #{edit_date}, #{user_no});
+	</insert>
+	
+	<!-- 데이터 삭제-->
+	<delete id="deleteItem" parameterType="study.spring.selection.model.Coupon">
+		DELETE FROM coupon WHERE coupon_no=#{coupon_no};
+	</delete>
+	
+	<!-- 데이터 수정 -->
+	<update id="updateItem" parameterType="study.spring.selection.model.Coupon">
+		UPDATE coupon SET coupon_name=#{coupon_name} WHERE coupon_no=#{coupon_no};
+	</update>
+	
+	<!-- 조건에 맞는 데이터 수를 집계하여 int 타입으로 반환 -->
+	<select id="selectCountAll" parameterType="study.spring.selection.model.Coupon" resultType="int">
+		SELECT COUNT(*) FROM coupon
+		
+		<where>
+			<if test="coupon_code != null and coupon_code != ''">
+				coupon_code LIKE concat('%', #{coupon_code}, '%')
+			</if>
+			
+			<if test="coupon_name != null and coupon_name != ''">
+				OR coupon_name LIKE concat('%', #{coupon_name}, '%')
+			</if>
+			
+			<if test="coupon_price != null and coupon_price != ''">
+				OR coupon_price LIKE concat('%', #{coupon_price}, '%')
+			</if>
+			
+			<if test="coupon_used != null and coupon_used != ''">
+				OR coupon_used LIKE concat('%', #{coupon_used}, '%')
+			</if>
+			
+			<if test="coupon_exp != null and coupon_exp != ''">
+				OR coupon_exp LIKE concat('%', #{coupon_exp}, '%')
+			</if>
+			
+			<if test="reg_date != null and reg_date != ''">
+				OR reg_date LIKE concat('%', #{reg_date}, '%')
+			</if>
+			
+			<if test="edit_date != null and edit_date != ''">
+				OR edit_date LIKE concat('%', #{edit_date}, '%')
+			</if>
+			
+			<if test="user_no != null and user_no != ''">
+				OR user_no LIKE concat('%', #{user_no}, '%')
+			</if>
+		</where>
+	</select>
+</mapper>

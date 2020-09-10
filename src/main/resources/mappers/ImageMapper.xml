@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ImageMapper">
+	<resultMap type="study.spring.selection.model.Image" id="imageMap">
+		<result property="image_no" column="image_no" />
+		<result property="image_size" column="image_size" />
+		<result property="image_type" column="image_type" />
+		<result property="image_path" column="image_path" />
+		<result property="image_name" column="image_name" />
+		<result property="reg_date" column="reg_date" />
+		<result property="edit_date" column="edit_date" />
+		<result property="product_no" column="product_no" />
+	</resultMap>
+	
+	<!-- 단일행 조회 -->
+	<select id="selectItem" parameterType="study.spring.selection.model.Image" resultMap="imageMap">
+		SELECT image_no, image_size, image_type, image_path, image_name, reg_date, edit_date, product_no 
+		FROM image WHERE image_no=#{image_no};
+	</select>
+	
+	<!-- 다중행 조회 -->
+	<select id="selectList" parameterType="study.spring.selection.model.Image" resultMap="imageMap">
+		SELECT image_no, image_size, image_type, image_path, image_name, reg_date, edit_date, product_no 
+		FROM image
+		
+		<where>
+			<if test="image_size != null and image_size != ''">
+				image_size LIKE concat('%', #{image_size}, '%')
+			</if>
+			
+			<if test="image_type != null and image_type != ''">
+				OR image_type LIKE concat('%', #{image_type}, '%')
+			</if>
+			
+			<if test="image_path != null and image_path != ''">
+				OR image_path LIKE concat('%', #{image_path}, '%')
+			</if>
+			
+			<if test="image_name != null and image_name != ''">
+				OR image_name LIKE concat('%', #{image_name}, '%')
+			</if>
+			
+			<if test="reg_date != null and reg_date != ''">
+				OR reg_date LIKE concat('%', #{reg_date}, '%')
+			</if>
+			
+			<if test="edit_date != null and edit_date != ''">
+				OR edit_date LIKE concat('%', #{edit_date}, '%')
+			</if>
+			
+			<if test="product_no != null and product_no != ''">
+				OR product_no LIKE concat('%', #{product_no}, '%')
+			</if>
+		</where>
+		
+		ORDER BY image_no DESC
+	</select>
+	
+	<!-- 데이터 저장 -->
+	<insert id="insertItem" parameterType="study.spring.selection.model.Image" useGeneratedKeys="true" keyProperty="image_no">
+		INSERT INTO image (image_size, image_type, image_path, image_name, reg_date, edit_date, product_no) 
+		VALUES (#{image_size}, #{image_type}, #{image_path}, #{image_name}, now(), now(), #{product_no});
+	</insert>
+	
+	<!-- 데이터 삭제-->
+	<delete id="deleteItem" parameterType="study.spring.selection.model.Image">
+		DELETE FROM image WHERE image_no=#{image_no};
+	</delete>
+	
+	<!-- 데이터 수정 -->
+	<update id="updateItem" parameterType="study.spring.selection.model.Image">
+		UPDATE image SET image_name=#{image_name} WHERE image_no=#{image_no};
+	</update>
+	
+	<!-- 조건에 맞는 데이터 수를 집계하여 int 타입으로 반환 -->
+	<select id="selectCountAll" parameterType="study.spring.selection.model.Image" resultType="int">
+		SELECT COUNT(*) FROM image
+		
+		<where>
+			<if test="image_size != null and image_size != ''">
+				image_size LIKE concat('%', #{image_size}, '%')
+			</if>
+			
+			<if test="image_type != null and image_type != ''">
+				OR image_type LIKE concat('%', #{image_type}, '%')
+			</if>
+			
+			<if test="image_path != null and image_path != ''">
+				OR image_path LIKE concat('%', #{image_path}, '%')
+			</if>
+			
+			<if test="image_name != null and image_name != ''">
+				OR image_name LIKE concat('%', #{image_name}, '%')
+			</if>
+			
+			<if test="reg_date != null and reg_date != ''">
+				OR reg_date LIKE concat('%', #{reg_date}, '%')
+			</if>
+			
+			<if test="edit_date != null and edit_date != ''">
+				OR edit_date LIKE concat('%', #{edit_date}, '%')
+			</if>
+			
+			<if test="product_no != null and product_no != ''">
+				OR product_no LIKE concat('%', #{product_no}, '%')
+			</if>
+		</where>
+	</select>
+</mapper>

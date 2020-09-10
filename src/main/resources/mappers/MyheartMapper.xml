@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="MyheartMapper">
+	<resultMap type="study.spring.selection.model.Myheart" id="myheartMap">
+		<result property="myheart_no" column="myheart_no" />
+		<result property="user_no" column="user_no" />
+		<result property="product_no" column="product_no" />
+	</resultMap>
+	
+	<!-- 단일행 조회 -->
+	<select id="selectItem" parameterType="study.spring.selection.model.Myheart" resultMap="myheartMap">
+		SELECT myheart_no, user_no, product_no 
+		FROM myheart WHERE myheart_no=#{myheart_no};
+	</select>
+	
+	<!-- 다중행 조회 -->
+	<select id="selectList" parameterType="study.spring.selection.model.Myheart" resultMap="myheartMap">
+		SELECT myheart_no, user_no, product_no 
+		FROM myheart
+		
+		<where>
+			<if test="user_no != null and user_no != ''">
+				user_no LIKE concat('%', #{user_no}, '%')
+			</if>
+			
+			<if test="product_no != null and product_no != ''">
+				OR product_no LIKE concat('%', #{product_no}, '%')
+			</if>
+		</where>
+		
+		ORDER BY myheart_no DESC
+	</select>
+	
+	<!-- 데이터 저장 -->
+	<insert id="insertItem" parameterType="study.spring.selection.model.Myheart" useGeneratedKeys="true" keyProperty="myheart_no">
+		INSERT INTO myheart (user_no, product_no) 
+		VALUES (#{user_no}, #{product_no});
+	</insert>
+	
+	<!-- 데이터 삭제-->
+	<delete id="deleteItem" parameterType="study.spring.selection.model.Myheart">
+		DELETE FROM myheart WHERE myheart_no=#{myheart_no};
+	</delete>
+	
+	<!-- 데이터 수정 -->
+	<update id="updateItem" parameterType="study.spring.selection.model.Myheart">
+		UPDATE myheart SET product_no=#{product_no} WHERE myheart_no=#{myheart_no};
+	</update>
+	
+	<!-- 조건에 맞는 데이터 수를 집계하여 int 타입으로 반환 -->
+	<select id="selectCountAll" parameterType="study.spring.selection.model.Myheart" resultType="int">
+		SELECT COUNT(*) FROM myheart
+		
+		<where>
+			<if test="user_no != null and user_no != ''">
+				user_no LIKE concat('%', #{user_no}, '%')
+			</if>
+			
+			<if test="product_no != null and product_no != ''">
+				OR product_no LIKE concat('%', #{product_no}, '%')
+			</if>
+		</where>
+	</select>
+</mapper>
